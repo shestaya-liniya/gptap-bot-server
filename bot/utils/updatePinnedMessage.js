@@ -32,7 +32,6 @@ export async function updatePinnedMessage(mode = null, fromStart = false) {
       .then((sentMessage) => {
         PINNED_MESSAGE_ID = sentMessage.message_id;
         PREV_PINNED_MESSAGE_ID = PINNED_MESSAGE_ID
-        bot.pinChatMessage(originalChatId, PINNED_MESSAGE_ID)
       })
   })
 }
