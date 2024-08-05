@@ -5,7 +5,6 @@ import { load } from 'tiktoken/load'
 import registry from 'tiktoken/registry.json' assert { type: 'json' }
 import models from 'tiktoken/model_to_encoding.json' assert { type: 'json' }
 import { Sequelize } from 'sequelize'
-import { autoRemoveMessage } from '../commands/hoc/autoRemoveMessage.js'
 import { ct } from './createTranslate.js'
 import { updatePinnedMessage } from './updatePinnedMessage.js'
 
@@ -34,6 +33,15 @@ export const checkTokens = async (typeRequest, userID, text = '') => {
 export async function writingOffTokens(bot, msg, type, prompt = '') {
   const t = await ct(msg)
   const {price} = await checkTokens(type, msg.from.id, prompt)
+  console.log(msg)
+  bot.sendMessage(msg.chat.id, `<strong>- ${price}</strong> ⭐`, {
+    parse_mode: "HTML"
+  }).then((msg) => {
+    setTimeout(() => {
+      bot.deleteMessage(msg.chat.id, msg.message_id)
+    }, 2000)
+  })
+
 
   await db.subscriber.update(
     { tokens: Sequelize.literal(`tokens - ${price}`) },

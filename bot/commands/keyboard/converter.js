@@ -1,6 +1,6 @@
 import { errorMessage } from '../hoc/errorMessage.js'
 import { ct } from '../../utils/createTranslate.js'
-import { createStartKeyboardForReplyMarkup } from '../../utils/createStartKeyboard.js'
+import { updatePinnedMessage } from '../../utils/updatePinnedMessage.js'
 
 export const keyboardConverter = async (bot, msg) => {
   const t = await ct(msg)
@@ -17,7 +17,8 @@ export const keyboardConverter = async (bot, msg) => {
           chat_id: msg.chat.id,
           message_id: message_id,
           parse_mode: 'HTML',
-        }).catch(() => {
+        }).then(() => updatePinnedMessage(t('keyboard_convertor').trim()))
+        .catch(() => {
         return true
       })
       clearTimeout(timeout)
