@@ -163,7 +163,11 @@ Sentry.setTag('build', process.env.SERVER)
 
 
 console.log(`${PROTOCOL}://${removeTrailingSlash(CORS_HOST)}`)
-app.use(cors({ origin: `${PROTOCOL}://${removeTrailingSlash(CORS_HOST)}` }));
+if(process.env.DEV_CORS_HOST) {
+  app.use(cors({ origin: `${PROTOCOL}://${removeTrailingSlash(process.env.DEV_CORS_HOST)}` }));
+} else {
+  app.use(cors({ origin: `${PROTOCOL}://${removeTrailingSlash(CORS_HOST)}` }));
+}
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
