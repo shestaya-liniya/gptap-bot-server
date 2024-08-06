@@ -14,7 +14,4 @@ upscale
 test
 loading_upscales
 Imagines
-# Project exclude paths
-/conversions/
-/converted/
-/text-to-speech/
+
