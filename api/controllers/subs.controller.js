@@ -27,7 +27,6 @@ export const updateSubTokens = (req, res) => {
     tokens: req.body.tokens
   }, {where: {user_id: req.body.user_id}}).then(sub => {
     res.status(200).send(sub)
-    updatePinnedMessage()
   })
 }
 
