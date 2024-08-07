@@ -15,7 +15,7 @@ export const isTokensEmpty = async (bot, msg, tokens, price) => {
     disable_web_page_preview: true
   }
   try {
-    return keyboardMyAccount(bot, msg, null, null, t('msg:empty_tokens', {tokens, price}))
+    await bot.sendMessage(chatId, t('msg:empty_tokens'), generalOptions)
   } catch (error) {
     await bot.sendMessage(chatId, `${error.message}`, generalOptions)
   }
