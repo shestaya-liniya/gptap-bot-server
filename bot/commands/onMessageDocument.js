@@ -127,9 +127,9 @@ export const onMessageDocument = async (bot, msg) => {
           format_to: msg.data.split('-')[0],
           price_tokens: settings['cost_converter']
         })
-        if(msg.from) {
+        /*if(msg.from) {
           await writingOffTokens(bot, msg, REQUEST_TYPES.CONVERTOR)
-        }
+        }*/
 
         await bot.deleteMessage(msg.from.id, msg.message.message_id).catch((error) => console.log('error dm', error))
         const waiting = await stepperOn(bot, msg, 0) // верочтно логичнее будет сохранить прошлое сообщение msg.message.message_id
