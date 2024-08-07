@@ -66,7 +66,7 @@ export const keyboardChatGPT = async (bot, msg) => {
           chat_id: chatId,
           ...secondMessage.options
         }
-      ).then(() => updatePinnedMessage(COMMAND_GPT))
+      )
         .catch((err) => {
         console.log(err)
       })
