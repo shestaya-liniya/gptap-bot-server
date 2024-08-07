@@ -33,7 +33,11 @@ export default (sequelize, DataTypes) => {
       },
       tokens: {
         type: DataTypes.DOUBLE,
-        defaultValue: 20000,
+        defaultValue: 1000,
+      },
+      clickerTokens: {
+        type: DataTypes.DOUBLE,
+        defaultValue: 0,
       },
       paid_days: {
         type: DataTypes.DOUBLE,

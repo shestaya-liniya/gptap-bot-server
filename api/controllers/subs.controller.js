@@ -24,10 +24,9 @@ export const getOneSub = (req, res) => {
 export const updateSubTokens = (req, res) => {
   console.log(req.body)
   db.subscriber.update({
-    tokens: req.body.tokens
+    clickerTokens: req.body.tokens
   }, {where: {user_id: req.body.user_id}}).then(sub => {
     res.status(200).send(sub)
-    updatePinnedMessage()
   })
 }
 
