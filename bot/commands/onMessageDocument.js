@@ -127,7 +127,7 @@ export const onMessageDocument = async (bot, msg) => {
           format_to: msg.data.split('-')[0],
           price_tokens: settings['cost_converter']
         })
-
+        console.log(msg)
         await writingOffTokens(bot, msg, REQUEST_TYPES.CONVERTOR)
 
         await bot.deleteMessage(msg.from.id, msg.message.message_id).catch((error) => console.log('error dm', error))
