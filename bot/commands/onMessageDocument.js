@@ -128,7 +128,6 @@ export const onMessageDocument = async (bot, msg) => {
           price_tokens: settings['cost_converter']
         })
         console.log('message ->', msg)
-        console.log('message chat id ->', msg.chat.id)
         //await writingOffTokens(bot, msg, REQUEST_TYPES.CONVERTOR)
 
         await bot.deleteMessage(msg.from.id, msg.message.message_id).catch((error) => console.log('error dm', error))
