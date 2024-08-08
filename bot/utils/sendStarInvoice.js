@@ -1,12 +1,9 @@
 import { db } from '../db/index.js'
-import { Sequelize } from 'sequelize'
-import { updatePinnedMessage } from './updatePinnedMessage.js'
 import { bot } from '../../app.js'
 import Config from './config.js'
 
 export const sendStarInvoice = async (tokens, stars, userId) => {
   const config = Config
-  let invoiceId;
 
   if(config.invoiceCanBeCreated) {
     console.log('sendStarInvoice')
@@ -43,30 +40,8 @@ export const sendStarInvoice = async (tokens, stars, userId) => {
           {
             parse_mode: 'MarkdownV2',
           }).then(msg => {
-          invoiceId = msg.message_id
+            config.setInvoiceId(msg.message_id)
         })
-      bot.on('successful_payment', async (msg) => {
-
-        const chatId = msg.chat.id;
-        const tokensPayload = msg.successful_payment.invoice_payload
-        config.setInvoiceCanBeCreated(true)
-
-        bot.deleteMessage(user.chat_id, invoiceId)
-
-        await db.subscriber.update(
-          {
-            tokens: Sequelize.literal(`tokens + ${tokensPayload}`),
-          },
-          { where: { chat_id: user.chat_id } }
-        )
-        await bot.sendMessage(chatId, 'Thank you for your purchase 🙌! \n<strong>- GPTap Team</strong>\n \nAnd now go ahead to generate awesome images or talking with chatGPT about philosophy 🥳', {
-          parse_mode: "HTML"
-        });
-        updatePinnedMessage()
-      });
-      bot.on('pre_checkout_query', (query) => {
-        bot.answerPreCheckoutQuery(query.id, true);
-      });
     })
   }
 }

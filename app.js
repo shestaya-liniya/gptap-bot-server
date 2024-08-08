@@ -52,6 +52,7 @@ import fs from 'fs'
 import { downAll } from 'docker-compose/dist/v2.js'
 import path from 'path'
 import { Sequelize } from 'sequelize'
+import Config from './bot/utils/config.js'
 
 const { TELEGRAM_API_KEY, SUDO_USER, NODE_REST_PORT, REACT_ADMIN_PORT, PROTOCOL, CORS_HOST } = process.env
 const sudoUser = parseInt(SUDO_USER, 10)
@@ -131,6 +132,31 @@ bot.on('message', async (msg, match) => {
       return isModeMidjourney(bot, msg, match, sudoUser, t)
   }
 })
+
+bot.on('successful_payment', async (msg) => {
+  const config = Config
+  const invoiceId = config.getInvoiceId()
+
+  const chatId = msg.chat.id;
+  const tokensPayload = msg.successful_payment.invoice_payload
+  config.setInvoiceCanBeCreated(true)
+
+  bot.deleteMessage(chatId, invoiceId)
+
+  await db.subscriber.update(
+    {
+      tokens: Sequelize.literal(`tokens + ${tokensPayload}`),
+    },
+    { where: { chat_id: chatId } }
+  )
+  await bot.sendMessage(chatId, 'Thank you for your purchase 🙌! \n<strong>- GPTap Team</strong>\n \nAnd now go ahead to generate awesome images or talking with chatGPT about philosophy 🥳', {
+    parse_mode: "HTML"
+  });
+  updatePinnedMessage()
+});
+bot.on('pre_checkout_query', (query) => {
+  bot.answerPreCheckoutQuery(query.id, true);
+});
 
 onMessageVoice(bot)
 

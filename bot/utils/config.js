@@ -5,11 +5,20 @@ class Config {
       return Config.instance;
     }
     this.invoiceCanBeCreated = true;
+    this.invoiceId = 0
     Config.instance = this;
   }
 
   getInvoiceCanBeCreated() {
     return this.invoiceCanBeCreated;
+  }
+
+  setInvoiceId (newData) {
+    this.invoiceId  = newData;
+  }
+
+  getInvoiceId () {
+    return this.invoiceId ;
   }
 
   setInvoiceCanBeCreated(newData) {
