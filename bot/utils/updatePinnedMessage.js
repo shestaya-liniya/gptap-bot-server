@@ -42,7 +42,8 @@ export async function updatePinnedMessage(mode = null, fromStart = false) {
 
 function formatNumberWithSpaces(number) {
   // Convert the number to a string
-  let numStr = number.toString();
+
+  let numStr = Math.floor(number).toString();
 
   // Use a regular expression to add a space every three digits from the end
   return numStr.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
