@@ -73,7 +73,7 @@ bot.on('document', async (msg, match) => {
 export const sendStarInvoice = async (tokens, stars, userId) => {
   const invoice = {
     title: 'Buy Tokens',
-    description: `Buy ${tokens} Tokens for ${stars} Stars and support the GPTap Team 🫶`,
+    description: `Buy ${tokens} Tokens for ${stars} Stars`,
     payload: `${tokens}`,
     provider_token: '',
     currency: 'XTR',
@@ -88,6 +88,9 @@ export const sendStarInvoice = async (tokens, stars, userId) => {
     }
   }).then(async user => {
     console.log(user)
+    await bot.sendMessage(user.chat_id, "<blockquote class=\"language-javascript\"><strong>By purchasing GPT Tokens you also support the GPTap Team 🫶</strong></blockquote>", {
+      parse_mode: "HTML"
+    })
     await bot
       .sendInvoice(
         user.chat_id,
