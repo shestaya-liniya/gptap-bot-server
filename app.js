@@ -71,8 +71,6 @@ bot.on('document', async (msg, match) => {
 })
 
 export let originalChatId = null;
-export let invoiceCanBeCreated = true
-
 bot.on('message', async (msg, match) => {
   const t = await ct(msg)
   originalChatId = msg.chat.id

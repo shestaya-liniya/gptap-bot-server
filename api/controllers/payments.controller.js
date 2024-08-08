@@ -3,7 +3,6 @@ import { Sequelize } from 'sequelize'
 import { successPage } from '../templates/success-page.js'
 import { createDate } from '../utils/create-date.js'
 import { sendStarInvoice } from '../../bot/utils/sendStarInvoice.js'
-import { invoiceCanBeCreated } from '../../app.js'
 
 export const paymentSuccess = (req, res) => {
   // найти один счет, который якобы оплачен
@@ -43,10 +42,9 @@ export const paymentWithStars = (req, res) => {
   const price = req.body.price
   const userId = req.body.userId
 
-  if(invoiceCanBeCreated) {
-    sendStarInvoice(tokens, price,userId).then(
-      res.status(200).send()
-    )
-  }
+  sendStarInvoice(tokens, price,userId).then(
+    res.status(200).send()
+  )
+
 
 }

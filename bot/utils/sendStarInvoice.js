@@ -1,13 +1,15 @@
 import { db } from '../db/index.js'
 import { Sequelize } from 'sequelize'
 import { updatePinnedMessage } from './updatePinnedMessage.js'
-import { bot, invoiceCanBeCreated } from '../../app.js'
+import { bot } from '../../app.js'
+import Config from './config.js'
 
 export const sendStarInvoice = async (tokens, stars, userId) => {
+  const config = Config
   let invoiceId;
 
-  if(invoiceCanBeCreated) {
-    invoiceCanBeCreated = false
+  if(config.invoiceCanBeCreated) {
+    config.setInvoiceCanBeCreated(false)
     const invoice = {
       title: 'Buy Tokens',
       description: `Buy ${tokens} Tokens for ${stars} Stars`,
@@ -46,7 +48,7 @@ export const sendStarInvoice = async (tokens, stars, userId) => {
 
         const chatId = msg.chat.id;
         const tokensPayload = msg.successful_payment.invoice_payload
-        invoiceCanBeCreated = true
+        config.setInvoiceCanBeCreated(true)
 
         bot.deleteMessage(user.chat_id, invoiceId)
 
