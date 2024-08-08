@@ -34,7 +34,7 @@ export async function writingOffTokens(bot, msg, type, prompt = '') {
   const t = await ct(msg)
   const {price} = await checkTokens(type, msg.from.id, prompt)
   console.log(msg)
-  bot.sendMessage(msg.chat.id, `<strong>- ${price}</strong> ⭐`, {
+  bot.sendMessage(msg.chat.id, `<strong>- ${Math.floor(price)}</strong> ⭐`, {
     parse_mode: "HTML"
   }).then((msg) => {
     setTimeout(() => {

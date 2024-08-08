@@ -45,10 +45,6 @@ function formatNumberWithSpaces(number) {
 
   let numStr = number.toString();
 
-  if(numStr.length > 2) {
-    numStr = numStr.slice(0, 3)
-  }
-
   // Use a regular expression to add a space every three digits from the end
   return numStr.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
