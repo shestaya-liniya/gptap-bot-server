@@ -33,7 +33,7 @@ export const checkTokens = async (typeRequest, userID, text = '') => {
 export async function writingOffTokens(bot, msg, type, prompt = '') {
   const t = await ct(msg)
   let {price} = await checkTokens(type, msg.from.id, prompt)
-  if(price < 0) price = 1
+  if(price < 1) price = 1
   bot.sendMessage(msg.chat.id, `<strong>- ${Math.floor(price)}</strong> ⭐`, {
     parse_mode: "HTML"
   }).then((msg) => {
