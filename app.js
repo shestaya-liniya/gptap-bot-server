@@ -70,7 +70,7 @@ bot.on('document', async (msg, match) => {
   return onMessageDocument(bot, msg)
 })
 
-export const sendStarInvoice = async (tokens, stars) => {
+export const sendStarInvoice = async (tokens, stars, userId) => {
   const invoice = {
     title: 'Buy Tokens',
     description: `Buy ${tokens} Tokens for ${stars} Stars and support the GPTap Team 🫶`,
@@ -82,18 +82,27 @@ export const sendStarInvoice = async (tokens, stars) => {
     ],
   };
 
-  await bot
-    .sendInvoice(
-      CHAT_ID,
-      invoice.title,
-      invoice.description,
-      invoice.payload,
-      invoice.provider_token,
-      invoice.currency,
-      invoice.prices,
-      {
-        parse_mode: 'MarkdownV2',
-      });
+  await db.subscriber.findOne({
+    where: {
+      user_id: userId
+    }
+  }).then(async user => {
+    console.log(user)
+    await bot
+      .sendInvoice(
+        user.chat_id,
+        invoice.title,
+        invoice.description,
+        invoice.payload,
+        invoice.provider_token,
+        invoice.currency,
+        invoice.prices,
+        {
+          parse_mode: 'MarkdownV2',
+        });
+  })
+
+
 
   bot.on('pre_checkout_query', (query) => {
     bot.answerPreCheckoutQuery(query.id, true);

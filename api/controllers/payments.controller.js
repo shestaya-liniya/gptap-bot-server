@@ -40,6 +40,9 @@ export const paymentSuccess = (req, res) => {
 export const paymentWithStars = (req, res) => {
   const tokens = req.body.tokens
   const price = req.body.price
+  const userId = req.body.userId
 
-  sendStarInvoice(tokens, price)
+  sendStarInvoice(tokens, price,userId).then(
+    res.status(200).send()
+  )
 }
