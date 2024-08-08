@@ -4,7 +4,6 @@ import { ct } from '../utils/createTranslate.js'
 import { createStartKeyboardForReplyMarkup } from '../utils/createStartKeyboard.js'
 import { updatePinnedMessage } from '../utils/updatePinnedMessage.js'
 import { COMMAND_GPT } from '../constants/index.js'
-import { sendStarInvoice } from '../../app.js'
 
 dotenv.config()
 
