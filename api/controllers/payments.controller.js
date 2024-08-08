@@ -43,9 +43,8 @@ export const paymentWithStars = (req, res) => {
   const price = req.body.price
   const userId = req.body.userId
 
-  if(Config.invoiceCanBeCreated) {
-    sendStarInvoice(tokens, price,userId).then(
-      res.status(200).send()
-    )
-  }
+  sendStarInvoice(tokens, price,userId).then(
+    res.status(200).send()
+  )
+
 }
