@@ -103,6 +103,21 @@ export const sendStarInvoice = async (tokens, stars, userId) => {
         {
           parse_mode: 'MarkdownV2',
         });
+    bot.on('successful_payment', async (msg) => {
+      console.log('successful_payment')
+      const chatId = msg.chat.id;
+      const tokensPayload = msg.successful_payment.invoice_payload
+      await db.subscriber.update(
+        {
+          tokens: Sequelize.literal(`tokens + ${tokensPayload}`),
+        },
+        { where: { chat_id: user.chat_id } }
+      )
+      await bot.sendMessage(chatId, 'Thank you for your purchase 🙌! \n<strong>- GPTap Team</strong>\n \nAnd now go ahead to generate awesome images or talking with chatGPT about philosophy 🥳', {
+        parse_mode: "HTML"
+      });
+      updatePinnedMessage()
+    });
   })
 
 
@@ -111,18 +126,7 @@ export const sendStarInvoice = async (tokens, stars, userId) => {
     bot.answerPreCheckoutQuery(query.id, true);
   });
 
-  bot.on('successful_payment', async (msg) => {
-    const chatId = msg.chat.id;
-    const tokensPayload = msg.successful_payment.invoice_payload
-    await db.subscriber.update(
-      {
-        tokens: Sequelize.literal(`tokens + ${tokensPayload}`),
-      },
-      { where: { chat_id: CHAT_ID } }
-    )
-    await bot.sendMessage(chatId, 'Thank you for your purchase! ❤️\n-GPTap Team\nAnd now go ahead to generate awesome images or talking with chatGPT about philosophy 🥳');
-    updatePinnedMessage()
-  });
+
 }
 
 export let originalChatId = null;
