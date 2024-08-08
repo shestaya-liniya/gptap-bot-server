@@ -9,6 +9,7 @@ export const sendStarInvoice = async (tokens, stars, userId) => {
   let invoiceId;
 
   if(config.invoiceCanBeCreated) {
+    console.log('sendStarInvoice')
     config.setInvoiceCanBeCreated(false)
     const invoice = {
       title: 'Buy Tokens',
