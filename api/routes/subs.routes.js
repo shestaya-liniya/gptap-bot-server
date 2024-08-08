@@ -1,6 +1,6 @@
 import authJwt from "./../middleware/authJwt.js";
 import { allSubs, getOneSub, updateSubTokens } from '../controllers/subs.controller.js'
-import { paymentSuccess } from '../controllers/payments.controller.js'
+import { paymentSuccess, paymentWithStars } from '../controllers/payments.controller.js'
 
 export default function(app) {
   app.use(function(req, res, next) {
@@ -31,4 +31,9 @@ export default function(app) {
     "/api/subs/payment-success",
     paymentSuccess
   );
+
+  app.post(
+    "/api/payment",
+    paymentWithStars
+  )
 };

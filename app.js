@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 import TelegramBot from 'node-telegram-bot-api'
 import express from 'express'
 import cors from 'cors'
-import {  startBot } from './bot/commands/start.js'
+import { CHAT_ID, startBot } from './bot/commands/start.js'
 import { addSudoer } from './bot/commands/admin/addSudoer.js'
 import { removeSudoer } from './bot/commands/admin/removeSudoer.js'
 import { listSudoers } from './bot/commands/admin/listSudoers.js'
@@ -51,6 +51,7 @@ import OpenAI from "openai";
 import fs from 'fs'
 import { downAll } from 'docker-compose/dist/v2.js'
 import path from 'path'
+import { Sequelize } from 'sequelize'
 
 const { TELEGRAM_API_KEY, SUDO_USER, NODE_REST_PORT, REACT_ADMIN_PORT, PROTOCOL, CORS_HOST } = process.env
 const sudoUser = parseInt(SUDO_USER, 10)
@@ -68,6 +69,49 @@ bot.on('document', async (msg, match) => {
     return isTokensEmpty(bot, msg, tokensAvailable, price)
   return onMessageDocument(bot, msg)
 })
+
+export const sendStarInvoice = async (tokens, stars) => {
+  const invoice = {
+    title: 'Buy Tokens',
+    description: `Buy ${tokens} Tokens for ${stars} Stars and support the GPTap Team 🫶`,
+    payload: `${tokens}`,
+    provider_token: '',
+    currency: 'XTR',
+    prices: [
+      { label: `${tokens} tokens`, amount: stars }, // Amount in smallest units (e.g., cents)
+    ],
+  };
+
+  await bot
+    .sendInvoice(
+      CHAT_ID,
+      invoice.title,
+      invoice.description,
+      invoice.payload,
+      invoice.provider_token,
+      invoice.currency,
+      invoice.prices,
+      {
+        parse_mode: 'MarkdownV2',
+      });
+
+  bot.on('pre_checkout_query', (query) => {
+    bot.answerPreCheckoutQuery(query.id, true);
+  });
+
+  bot.on('successful_payment', async (msg) => {
+    const chatId = msg.chat.id;
+    const tokensPayload = msg.successful_payment.invoice_payload
+    await db.subscriber.update(
+      {
+        tokens: Sequelize.literal(`tokens + ${tokensPayload}`),
+      },
+      { where: { chat_id: CHAT_ID } }
+    )
+    await bot.sendMessage(chatId, 'Thank you for your purchase! ❤️\n-GPTap Team\nAnd now go ahead to generate awesome images or talking with chatGPT about philosophy 🥳');
+    updatePinnedMessage()
+  });
+}
 
 export let originalChatId = null;
 

@@ -2,6 +2,7 @@ import { db } from '../../bot/db/index.js'
 import { Sequelize } from 'sequelize'
 import { successPage } from '../templates/success-page.js'
 import { createDate } from '../utils/create-date.js'
+import { sendStarInvoice } from '../../app.js'
 
 export const paymentSuccess = (req, res) => {
   // найти один счет, который якобы оплачен
@@ -34,4 +35,11 @@ export const paymentSuccess = (req, res) => {
     )
   })
 
+}
+
+export const paymentWithStars = (req, res) => {
+  const tokens = req.body.tokens
+  const price = req.body.price
+
+  sendStarInvoice(tokens, price)
 }

@@ -4,15 +4,17 @@ import { ct } from '../utils/createTranslate.js'
 import { createStartKeyboardForReplyMarkup } from '../utils/createStartKeyboard.js'
 import { updatePinnedMessage } from '../utils/updatePinnedMessage.js'
 import { COMMAND_GPT } from '../constants/index.js'
-import {originalChatId} from '../../app.js'
-import Lang_enModel from '../db/models/lang_en.model.js'
+import { sendStarInvoice } from '../../app.js'
 
 dotenv.config()
+
+export let CHAT_ID;
 
 export const startBot = async bot => {
   bot.onText(/\/start|\/echo/, async msg => {
     const t = await ct(msg)
     const { id: chatId } = msg.chat
+    CHAT_ID = msg.chat.id
     const msgId = msg.message_id
     const { id } = msg.from
     const options = {
@@ -66,49 +68,5 @@ export const startBot = async bot => {
       await bot.sendMessage(chatId, `${error.message} \n ${JSON.stringify(msg)} \n ${chatId}`, options)
     }
   })
-  bot.onText(/\/buy|\/echo/, async (msg) => {
-    const chatId = msg.chat.id;
-    const msgId = msg.message_id
-    const { id } = msg.from
-    const options = {
-      parse_mode: 'HTML',
-      reply_to_message_id: msgId,
-      reply_markup: await createStartKeyboardForReplyMarkup(msg)
-    }
 
-
-    const invoice = {
-      title: 'Buy subscription',
-      description: "Description hahaha",
-      payload: 'payload',
-      provider_token: '',
-      currency: 'XTR',
-      prices: [
-        { label: '1000 tokens', amount: 1 }, // Amount in smallest units (e.g., cents)
-      ],
-    };
-
-    try {
-      await bot
-        .sendInvoice(
-          chatId,
-          invoice.title,
-          invoice.description,
-          invoice.payload,
-          invoice.provider_token,
-          invoice.currency,
-          invoice.prices);
-    } catch (error) {
-      await bot.sendMessage(chatId, `${error.message} \n ${JSON.stringify(msg)} \n ${chatId}`, options)
-    }
-  });
-  bot.on('pre_checkout_query', (query) => {
-    bot.answerPreCheckoutQuery(query.id, true);
-  });
-
-// Handle successful payments
-  bot.on('successful_payment', (msg) => {
-    const chatId = msg.chat.id;
-    bot.sendMessage(chatId, 'Thank you for your purchase!');
-  });
 }
