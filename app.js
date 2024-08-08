@@ -71,6 +71,8 @@ bot.on('document', async (msg, match) => {
 })
 
 export const sendStarInvoice = async (tokens, stars, userId) => {
+  let invoiceId;
+
   const invoice = {
     title: 'Buy Tokens',
     description: `Buy ${tokens} Tokens for ${stars} Stars`,
@@ -102,11 +104,16 @@ export const sendStarInvoice = async (tokens, stars, userId) => {
         invoice.prices,
         {
           parse_mode: 'MarkdownV2',
-        });
+        }).then(msg => {
+        invoiceId = msg.message_id
+      })
     bot.on('successful_payment', async (msg) => {
-      console.log('successful_payment')
+
       const chatId = msg.chat.id;
       const tokensPayload = msg.successful_payment.invoice_payload
+
+      bot.deleteMessage(user.chat_id, invoiceId)
+
       await db.subscriber.update(
         {
           tokens: Sequelize.literal(`tokens + ${tokensPayload}`),
