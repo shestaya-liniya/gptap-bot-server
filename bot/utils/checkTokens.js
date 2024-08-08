@@ -32,8 +32,8 @@ export const checkTokens = async (typeRequest, userID, text = '') => {
 // Функция для списания определенного кол-ва токенов в зависимости от типа запроса
 export async function writingOffTokens(bot, msg, type, prompt = '') {
   const t = await ct(msg)
-  const {price} = await checkTokens(type, msg.from.id, prompt)
-  console.log(msg)
+  let {price} = await checkTokens(type, msg.from.id, prompt)
+  if(price < 0) price = 1
   bot.sendMessage(msg.chat.id, `<strong>- ${Math.floor(price)}</strong> ⭐`, {
     parse_mode: "HTML"
   }).then((msg) => {
@@ -44,7 +44,7 @@ export async function writingOffTokens(bot, msg, type, prompt = '') {
 
 
   await db.subscriber.update(
-    { tokens: Sequelize.literal(`tokens - ${price}`) },
+    { tokens: Sequelize.literal(`tokens - ${Math.floor(price)}`) },
     { where: { chat_id: msg.from.id } }
   ).then(async () => {
     await db.subscriber.findOne({
