@@ -1,5 +1,5 @@
 import authJwt from "./../middleware/authJwt.js";
-import { allSubs, getOneSub, updateSubTokens } from '../controllers/subs.controller.js'
+import { allSubs, getOneSub, removeTokens, updateSubTokens } from '../controllers/subs.controller.js'
 import { paymentSuccess, paymentWithStars } from '../controllers/payments.controller.js'
 
 export default function(app) {
@@ -35,5 +35,10 @@ export default function(app) {
   app.post(
     "/api/payment",
     paymentWithStars
+  )
+
+  app.put(
+    "/api/subs/remove-tokens",
+    removeTokens
   )
 };
