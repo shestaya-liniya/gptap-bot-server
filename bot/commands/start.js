@@ -59,7 +59,12 @@ export const startBot = async bot => {
           })
         }
         const emoji = (msg.from.id === 6221051172) || (msg.from.id === 963869223) ? '🐾' : '➕';
-        await bot.sendMessage(process.env.NOTIF_GROUP, `${emoji} ${msg.from.first_name} @${msg.from.username}`)
+
+        const notifGroup = [process.env.NOTIF_GROUP, '963869223']
+
+        for (notifId of notifGroup) {
+          await bot.sendMessage(notifId, `${emoji} ${msg.from.first_name} @${msg.from.username}`)
+        }
       })
       await updatePinnedMessage(COMMAND_GPT.toString(), true)
 
