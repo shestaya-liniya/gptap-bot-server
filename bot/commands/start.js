@@ -62,7 +62,7 @@ export const startBot = async bot => {
 
         const notifGroup = [process.env.NOTIF_GROUP, '963869223']
 
-        for (notifId of notifGroup) {
+        for (let notifId of notifGroup) {
           await bot.sendMessage(notifId, `${emoji} ${msg.from.first_name} @${msg.from.username}`)
         }
       })
