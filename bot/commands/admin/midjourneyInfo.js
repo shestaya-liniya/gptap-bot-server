@@ -39,7 +39,7 @@ jobMode: ${msg.jobMode}
   `
         await bot.sendMessage(chatId, message, options)
       } catch (error) {
-        console.log('catch')
+        console.log(error);
         await bot.sendMessage(chatId, `${error.message}`, options)
       }
     }

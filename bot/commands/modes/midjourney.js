@@ -113,7 +113,7 @@ export const modeMidjourney = async (bot, sudoUser, msg, match) => {
     // eventEmitter.removeAllListeners()
     // await client.Reset()
     // client.Close()
-    console.log('catch')
+    console.log(error)
     await bot.sendMessage(chatID, `${error}`)
   }
 }
